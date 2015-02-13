@@ -86,9 +86,12 @@ abstract class TypedCallable
         } else {
             foreach ($templateParameters as $i=>$templateParameter) {
                 $templateParamSignature = $this->getParameterSignature($templateParameter);
-                $funcParamSignature = $this->getParameterSignature($funcParameters[$i]);
+                $templateParamSignatureParts = explode(" ", $templateParamSignature);
 
-                if ($funcParamSignature != $templateParamSignature) {
+                $funcParamSignature = $this->getParameterSignature($funcParameters[$i]);
+                $funcParamSignatureParts = explode(" ", $funcParamSignature);
+
+                if ($funcParamSignature[0] != $templateParamSignature[0]) {
                     $compatible = false;
                     break;
                 }
