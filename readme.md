@@ -13,8 +13,10 @@ Usage
 ============
 
 Define your own class extending TypedCallable
+    
+    use Czt08883\TypedCallable\TypedCallable\TypedCallable;
 
-    class OnDataCallable extends Czt08883\TypedCallable\TypedCallable\TypedCallable 
+    class OnDataCallable extends TypedCallable 
     {
         /**
          * Implement "useTemplate()" abstract method.
@@ -39,6 +41,7 @@ In your other class, which requires typed callable:
 
      class DataReceiverExample 
      {
+     
         /**
          * @var OnDataCallable
          */ 
