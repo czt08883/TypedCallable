@@ -1,0 +1,99 @@
+<?php
+
+namespace Czt08883\TypedCallable;
+
+/**
+ * Class TypedCallable
+ * @package Czt08883\TypedCallable
+ */
+abstract class TypedCallable
+{
+    /**
+     * @var callable
+     */
+    private $func;
+
+    /**
+     * @param callable $func
+     *
+     * @throws TypedCallableSignatureMismatchException
+     */
+    public function __construct(callable $func)
+    {
+        if (!$this->isCompatible($func)) {
+            throw new TypedCallableSignatureMismatchException(
+                "Callable signature mismatch. "
+                . "Callable must be: "
+                . "function(" . $this->getParametersString() . "){...}"
+            );
+        }
+        $this->func = $func;
+    }
+
+    /**
+     * Invoke magic
+     */
+    public function __invoke()
+    {
+        call_user_func_array($this->func, func_get_args());
+    }
+
+    /**
+     * @Contract\Ensure("is_callable($__result)")
+     */
+    abstract public function useTemplate();
+
+    /**
+     * @return string
+     */
+    private function getParametersString()
+    {
+        $templateReflection = new \ReflectionFunction($this->useTemplate());
+        $templateParameters = $templateReflection->getParameters();
+        $parameterStringsArray = array_map([$this,'getParameterSignature'], $templateParameters);
+        return implode(', ', $parameterStringsArray);
+    }
+
+    /**
+     * @param \ReflectionParameter $param
+     * @return mixed
+     */
+    private function getParameterSignature(\ReflectionParameter $param)
+    {
+        $fullString = $param->__toString();
+        $extractRegex = "/^.*\[\s*<\S*>\s*(\S+\s*\S+)\s*\].*$/isu";
+
+        preg_match_all($extractRegex, $fullString, $matches);
+
+        return $matches[1][0];
+    }
+
+    /**
+     * @param callable $func
+     * @return bool
+     */
+    private function isCompatible(callable $func)
+    {
+        $templateReflection = new \ReflectionFunction($this->useTemplate());
+        $funcReflection = new \ReflectionFunction($func);
+
+        $templateParameters = $templateReflection->getParameters();
+        $funcParameters = $funcReflection->getParameters();
+
+        $compatible = true;
+        if (count($templateParameters) != count($funcParameters)) {
+            $compatible = false;
+        } else {
+            foreach ($templateParameters as $i=>$templateParameter) {
+                $templateParamSignature = $this->getParameterSignature($templateParameter);
+                $funcParamSignature = $this->getParameterSignature($funcParameters[$i]);
+
+                if ($funcParamSignature != $templateParamSignature) {
+                    $compatible = false;
+                    break;
+                }
+            }
+        }
+        return $compatible;
+    }
+}
