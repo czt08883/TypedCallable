@@ -1,0 +1,19 @@
+{
+    "name" : "czt08883/TypedCallable",
+    "description" : "",
+    "version" : "0.1",
+    "type" : "library",
+    "homepage": "https://github.com/czt08883/TypedCallable",
+    "license" : "Unlicense",
+    "keywords" : ["callable", "callback"],
+    "authors" : [{
+        "name" : "Sergei Petrov",
+        "email" : "czt08883@gmail.com"
+    }],
+    "require" : {
+        "php": ">=5.4"
+    },
+    "autoload" : {
+        "psr-4" : { "" : "src/" }
+    }
+}
