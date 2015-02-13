@@ -40,6 +40,8 @@ abstract class TypedCallable
 
     /**
      * @Contract\Ensure("is_callable($__result)")
+     *
+     * return callable
      */
     abstract public function useTemplate();
 
@@ -51,18 +53,19 @@ abstract class TypedCallable
         $templateReflection = new \ReflectionFunction($this->useTemplate());
         $templateParameters = $templateReflection->getParameters();
         $parameterStringsArray = array_map([$this,'getParameterSignature'], $templateParameters);
+
         return implode(', ', $parameterStringsArray);
     }
 
     /**
      * @param \ReflectionParameter $param
+     *
      * @return mixed
      */
     private function getParameterSignature(\ReflectionParameter $param)
     {
         $fullString = $param->__toString();
         $extractRegex = "/^.*\[\s*<\S*>\s*(\S+\s*\S+)\s*\].*$/isu";
-
         preg_match_all($extractRegex, $fullString, $matches);
 
         return $matches[1][0];
@@ -70,6 +73,7 @@ abstract class TypedCallable
 
     /**
      * @param callable $func
+     *
      * @return bool
      */
     private function isCompatible(callable $func)
@@ -91,12 +95,13 @@ abstract class TypedCallable
                 $funcParamSignature = $this->getParameterSignature($funcParameters[$i]);
                 $funcParamSignatureParts = explode(" ", $funcParamSignature);
 
-                if ($funcParamSignature[0] != $templateParamSignature[0]) {
+                if ($funcParamSignatureParts[0] != $templateParamSignatureParts[0]) {
                     $compatible = false;
                     break;
                 }
             }
         }
+
         return $compatible;
     }
 }
