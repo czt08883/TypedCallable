@@ -27,7 +27,7 @@ Define your own class extending TypedCallable
          */
         public function useTemplate()
         {
-            return function(SomeClass $a, array $b, $c);
+            return function(SomeClass $a, array $b, $c){};
         }
     }    
     
