@@ -6,6 +6,9 @@ Abstract PHP class, which allows to implement callables with signature check
 Installation
 ============
 
+    composer require czt08883/TypedCallable
+
+
 Usage
 ============
 
