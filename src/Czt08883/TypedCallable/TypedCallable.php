@@ -2,11 +2,13 @@
 
 namespace Czt08883\TypedCallable;
 
+use Czt08883\TypedCallable\Exception\TypedCallableSignatureMismatchException;
+
 /**
  * Class TypedCallable
  * @package Czt08883\TypedCallable
  */
-abstract class TypedCallable
+abstract class TypedCallable implements TypedCallableInterface
 {
     /**
      * @var callable

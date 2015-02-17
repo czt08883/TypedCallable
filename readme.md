@@ -16,6 +16,7 @@ Define your own class extending TypedCallable
     
     use Czt08883\TypedCallable\TypedCallable\TypedCallable;
 
+
     class OnDataCallable extends TypedCallable 
     {
         /**
@@ -77,19 +78,20 @@ In your other class, which requires typed callable:
      
 Use your DataReceiverExample
       
+      
       $dataReceiver = new DataReceiverExample();
       $dataReceiver->setOnDataCallback(
           new OnDataCallable(
              function (SomeClass $a, array $b, $c) {
                 // just display it, for example
-                echo "Yay, recived some data.";
+                echo "Yay, received some data.";
              }
           )
       );
       
       /* Simulate incoming data event:
        * This will invoke a callback, installed earlier. So output will be
-       *     "Yay, recived some data."
+       *     "Yay, received some data."
        */
       $dataReceiver->onData();
       
@@ -99,6 +101,8 @@ Now let us test callback with wrong signature.
 Following code will trigger TypedCallableSignatureMismatchException
 with following message:
   "Callable signature mismatch. Callable must be: function(SomeClass $a, array $b, $c){...}"
+
+
 
        $dataReceiver->setOnDataCallback(
             new OnDataCallable(
